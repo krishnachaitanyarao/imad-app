@@ -4,8 +4,10 @@ var path = require('path');
 
 var app = express();
 app.use(morgan('combined'));
+//counter page value
+var counter=0;
 
-
+//more pages array
 var articlesDatabase={
   'article-one':{
     title :'Article-One | Nandu',
@@ -32,6 +34,7 @@ var articlesDatabase={
     num :'3'
   }
 };
+//duynamic page creator
 var createTemplate = function(data){
   var title= data.title;
   var heading=data.heading;
@@ -83,14 +86,33 @@ app.get('/', function (req, res) {
   });
  
  */
+
+//page calling funtion
+
 app.get('/:articleNameFromUrl',function(req,res){
   //here we are using the : for retriving the succeeding text into variable from express framework
   var articleNameRetrieved= req.params.articleNameFromUrl;
-  res.send(createTemplate(articlesDatabase[articleNameRetrieved]));
+  if(articleNameRetrieved=="home"){
+    res.sendFile(path.join(__dirname, 'ui', 'home.html'));
+  }
+  else if(articleNameRetrieved=="counter"){
+    counter = counter + 1;
+    res.send(counter.toString());
+
+  }
+  else{
+   
+    res.send(createTemplate(articlesDatabase[articleNameRetrieved]));
+  }
 });
 
 app.get('/ui/style.css', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'style.css'));
+});
+
+
+app.get('/ui/main.js', function (req, res) {
+  res.sendFile(path.join(__dirname, 'ui', 'main.js'));
 });
 
 app.get('/ui/madi.png', function (req, res) {
