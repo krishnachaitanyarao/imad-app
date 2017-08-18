@@ -2,11 +2,23 @@ var express = require('express');
 var morgan = require('morgan');
 var path = require('path');
 
+//database connectivity to the app uysing npm postgress package named as pg package
+
+var Pool = require('pg-pool');
+const config = {
+  user: 'jkishorbd',
+  host: 'db.imad.hasura-app.io',
+  database: 'jkishorbd',
+  password: 'db-jkishorbd-77150',
+  port: 5432,
+};
+var pool= new Pool(config);
+//name array
+var names=[];
 var app = express();
 app.use(morgan('combined'));
 //counter page value
 var counter=0;
-
 //more pages array
 var articlesDatabase={
   'article-one':{
@@ -46,6 +58,7 @@ var createTemplate = function(data){
     <head>
         <title>${title} </title>
         <link rel="stylesheet" href="/ui/style.css">
+        <script src="/ui/main.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body class="container">
@@ -61,13 +74,32 @@ var createTemplate = function(data){
           <button><a href="/article-one">1</a></button>
           <button><a href="/article-two">2</a></button>
           <button><a href="/article-three">3</a></button>
+          
         </span>
+        <div>
+          <input type="text" placeholder="Name" id="commentorName">
+          <input type="text" placeholder="Name" id="commentorText">
+          <input type="submit" value="Send" id="submit-cmn">
+          <ul id="cmnList">
+            </div>
     
       </center>
     </body>
 </html>`;
   return htmlBody;
 }
+
+app.get('/testDatabase',function(req,res){
+  pool.query("select * from testDatabase",function(err,result){
+    if(err){
+      res.status(500).send(err.toString);
+    }
+    else{
+      res.send(JSON.stringify(result));
+    }
+  });
+});
+
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
@@ -87,8 +119,22 @@ app.get('/', function (req, res) {
  
  */
 
-//page calling funtion
 
+//page calling funtion
+app.get('/submit-btn',function(req,res){ // here the url format is /submit-btn?name=xxx so the query attribute will get to names whos value is xxx
+  var name=req.query.name;
+  names.push(name);
+  //sending 
+  res.send(JSON.stringify(names));
+
+});
+var cmnData={};
+app.get('/comment',function(req,res){
+  var cmnName=req.query.cmnName;
+  var cmnText=req.query.cmnText;
+  JSON.cmnData[cmnName]=cmnText;
+  res.send(JSON.stringify(cmnData));
+});
 app.get('/:articleNameFromUrl',function(req,res){
   //here we are using the : for retriving the succeeding text into variable from express framework
   var articleNameRetrieved= req.params.articleNameFromUrl;
