@@ -4,7 +4,7 @@ var path = require('path');
 
 //database connectivity to the app uysing npm postgress package named as pg package
 
-var Pool = require('pg-pool');
+var Pool = require('pg');
 const config = {
   user: 'jkishorbd',
   host: 'db.imad.hasura-app.io',
