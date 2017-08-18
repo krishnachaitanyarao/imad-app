@@ -4,7 +4,7 @@ var path = require('path');
 
 //database connectivity to the app uysing npm postgress package named as pg package
 
-const { Pool, Client } = require('pg');
+const Pool = require('pg');
 
 const pool = new Pool({
   user: 'dbuser',
