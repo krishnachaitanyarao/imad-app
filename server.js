@@ -12,7 +12,7 @@ const config = {
   password: 'db-jkishorbd-77150',
   port: 5432,
 };
-var pool= new Pool(config);
+const pool= new Pool(config);
 //name array
 var names=[];
 var app = express();
