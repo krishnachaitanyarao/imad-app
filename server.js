@@ -4,15 +4,22 @@ var path = require('path');
 
 //database connectivity to the app uysing npm postgress package named as pg package
 
-var Pool = require('pg');
-const config = {
-  user: 'jkishorbd',
-  host: 'db.imad.hasura-app.io',
-  database: 'jkishorbd',
-  password: 'db-jkishorbd-77150',
-  port: 5432,
-};
-const pool= new Pool(config);
+const { Pool, Client } = require('pg');
+
+const pool = new Pool({
+  user: 'dbuser',
+  host: 'database.server.com',
+  database: 'mydb',
+  password: 'secretpassword',
+  port: 3211,
+});
+
+pool.query('SELECT NOW()', (err, res) => {
+  console.log(err, res)
+  pool.end()
+});
+
+
 //name array
 var names=[];
 var app = express();
