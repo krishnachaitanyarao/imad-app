@@ -12,7 +12,7 @@ const config = {
   user: 'jkishorbd',
   host: 'db.imad.hasura-app.io',
   database: 'jkishorbd',
-  password: 'db-jkishorbd-77150',
+  password: process.env.DB_PASSWORD,
   port: 5432,
 };
 var pool= new Pool(config);
@@ -98,7 +98,7 @@ app.get('/testDatabase',function(req,res){
       res.status(500).send(err.toString);
     }
     else{
-      res.send(JSON.stringify(result.rows));
+      res.send(JSON.stringify(result));
     }
   });
 });
