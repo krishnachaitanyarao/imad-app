@@ -93,7 +93,7 @@ var createTemplate = function(data){
 };
 
 app.get('/testDatabase',function(req,res){
-  pool.query("select * from testDatabase",function(err,result){
+  pool.query('SELECT * FROM "testDatabase" LIMIT 50',function(err,result){
     if(err){
       res.status(500).send(err.toString);
     }
