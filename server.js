@@ -69,7 +69,7 @@ var createTemplate = function(data){
         <h2>
             THIS IS FROM THE ${heading} STUPID
         </h2>
-        <h5>${date}</h5>
+        <h5>${date.toDateString()}</h5>
         <p>${content}</p>
         <h1>${num}</h1>
         <span>
@@ -91,29 +91,6 @@ var createTemplate = function(data){
 </html>`;
   return htmlBody;
 };
-app.get('/articles/:article',function(req,res){
-    //querying
-    pool.query("SELECT * FROM article WHERE title = '"+req.params.article+"'",function(err, result){
-        if(err){
-            //query err
-            res.status(500).send(err.toString());
-        }  else{
-            //record not found
-            if(result.rows===0){
-                res.status(40).send("article not found in the record database");
-        
-            }else{
-            //record fount and fetching
-            // we need only the one record
-            //hence
-            var articleData= result.rows[0];
-                res.send(createTemplate(articleData));    
-            }
-            
-        }
-    });
-    
-});
 
 app.get('/testDatabase',function(req,res){
   pool.query('SELECT * FROM "testDatabase" LIMIT 50',function(err,result){
