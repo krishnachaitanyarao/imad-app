@@ -91,6 +91,29 @@ var createTemplate = function(data){
 </html>`;
   return htmlBody;
 };
+app.get('/articles/:articleSelection',function(req,res){
+    //querying
+    pool.query('SELECT * FROM "article" WHERE "title" = "+rer.query.articleSelection+"',function(err, result){
+        if(err){
+            //query err
+            res.status(500).send(err.toString());
+        }  else{
+            //record not found
+            if(result.rows===0){
+                res.status(404).send("article not found in the record database");
+        
+            }else{
+            //record fount and fetching
+            // we need only the one record
+            //hence
+            var articleData= result.rows[0];
+                res.send(createTemplate(articleData));    
+            }
+            
+        }
+    });
+    
+});
 
 app.get('/testDatabase',function(req,res){
   pool.query('SELECT * FROM "testDatabase" LIMIT 50',function(err,result){
