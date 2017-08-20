@@ -93,7 +93,7 @@ var createTemplate = function(data){
 };
 app.get('/articles/:articleSelection',function(req,res){
     //querying
-    pool.query('SELECT * FROM "article" WHERE "title" = "+rer.query.articleSelection+"',function(err, result){
+    pool.query('SELECT * FROM "article" WHERE "title" = '+rer.query.articleSelection+'',function(err, result){
         if(err){
             //query err
             res.status(500).send(err.toString());
