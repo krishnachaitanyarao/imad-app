@@ -91,16 +91,15 @@ var createTemplate = function(data){
 </html>`;
   return htmlBody;
 };
-app.get('/articles/:articleSelection',function(req,res){
+app.get('/articles/:article',function(req,res){
     //querying
-    pool.query("SELECT * FROM article WHERE title = '"+req.params.articleSelection+"'",function(err, result){
+    pool.query("SELECT * FROM article WHERE title = '"+req.params.article+"'",function(err, result){
         if(err){
             //query err
             res.status(500).send(err.toString());
         }  else{
             //record not found
             if(result.rows===0){
-                res.send("notfound")
                 res.status(40).send("article not found in the record database");
         
             }else{
