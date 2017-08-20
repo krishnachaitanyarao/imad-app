@@ -172,7 +172,27 @@ app.get('/:articleNameFromUrl',function(req,res){
   }
   else{
    
-    res.send(createTemplate(articlesDatabase[articleNameRetrieved]));
+   pool.query("SELECT * FROM article WHERE title = '"+articleNameRetrieved+"'",function(err, result){
+        if(err){
+            //query err
+            res.status(500).send(err.toString());
+        }  else{
+            //record not found
+            if(result.rows===0){
+                res.status(40).send("article not found in the record database");
+        
+            }else{
+            //record fount and fetching
+            // we need only the one record
+            //hence
+            var articleData= result.rows[0];
+                res.send(createTemplate(articleData));    
+            }
+            
+        }
+    });
+    
+   // res.send(createTemplate(articlesDatabase[articleNameRetrieved]));
   }
 });
 
