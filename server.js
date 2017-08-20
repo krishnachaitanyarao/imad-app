@@ -151,8 +151,11 @@ app.get('/:articleNameFromUrl',function(req,res){
 
   }
   else{
-   
+   /* unsecure flow of variables.... hackers may attack by xss scripting
    pool.query("SELECT * FROM article WHERE title = '"+articleNameRetrieved+"'",function(err, result){
+   */
+   pool.query("SELECT * FROM article WHERE title = $1",[articleNameRetrieved],function(err, result){
+   
         if(err){
             //query err
             res.status(500).send(err.toString());
