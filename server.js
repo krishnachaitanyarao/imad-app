@@ -23,6 +23,8 @@ app.use(morgan('combined'));
 //counter page value
 var counter=0;
 //more pages array
+//database replaces this code..
+/*
 var articlesDatabase={
   'article-one':{
     title :'Article-One | Nandu',
@@ -49,6 +51,7 @@ var articlesDatabase={
     num :'3'
   }
 };
+*/
 //duynamic page creator
 var createTemplate = function(data){
   var title= data.title;
