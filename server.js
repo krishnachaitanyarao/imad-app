@@ -101,7 +101,7 @@ app.get('/articles/:articleSelection',function(req,res){
             //record not found
             if(result.rows===0){
                 res.send("notfound")
-                res.status(404).send("article not found in the record database");
+                res.status(40).send("article not found in the record database");
         
             }else{
             //record fount and fetching
