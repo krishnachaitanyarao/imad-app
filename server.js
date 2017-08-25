@@ -54,8 +54,8 @@ var articlesDatabase={
 */
 //duynamic page creator
 var createTemplate = function(data){
-  //var title= data.title;
   var heading=data.heading;
+  var title= data.title;
   var date= data.date;
   var content= data.content;
   var num=data.num;
