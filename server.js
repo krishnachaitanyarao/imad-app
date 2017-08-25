@@ -4,12 +4,19 @@ var path = require('path');
 
 //database connectivity to the app uysing npm postgress package named as pg package
 
+<<<<<<< HEAD
 var Pool = require('pg');
+=======
+
+//database connectivity to the app uysing npm postgress package named as pg package
+
+var Pool = require('pg').Pool;
+>>>>>>> 212b564c5fcb9bbcc231263d332cd4d78faa4e72
 const config = {
   user: 'jkishorbd',
   host: 'db.imad.hasura-app.io',
   database: 'jkishorbd',
-  password: 'db-jkishorbd-77150',
+  password: process.env.DB_PASSWORD,
   port: 5432,
 };
 var pool= new Pool(config);
@@ -32,6 +39,8 @@ app.use(morgan('combined'));
 //counter page value
 var counter=0;
 //more pages array
+//database replaces this code..
+/*
 var articlesDatabase={
   'article-one':{
     title :'Article-One | Nandu',
@@ -58,10 +67,11 @@ var articlesDatabase={
     num :'3'
   }
 };
+*/
 //duynamic page creator
 var createTemplate = function(data){
-  var title= data.title;
   var heading=data.heading;
+  var title= data.title;
   var date= data.date;
   var content= data.content;
   var num=data.num;
@@ -78,7 +88,7 @@ var createTemplate = function(data){
         <h2>
             THIS IS FROM THE ${heading} STUPID
         </h2>
-        <h5>${date}</h5>
+        <h5>${date.toDateString()}</h5>
         <p>${content}</p>
         <h1>${num}</h1>
         <span>
@@ -101,7 +111,20 @@ var createTemplate = function(data){
   return htmlBody;
 };
 
+<<<<<<< HEAD
 
+=======
+app.get('/testDatabase',function(req,res){
+  pool.query('SELECT * FROM "testDatabase" LIMIT 50',function(err,result){
+    if(err){
+      res.status(500).send(err.toString);
+    }
+    else{
+      res.send(JSON.stringify(result.row));
+    }
+  });
+});
+>>>>>>> 212b564c5fcb9bbcc231263d332cd4d78faa4e72
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
@@ -148,8 +171,31 @@ app.get('/:articleNameFromUrl',function(req,res){
 
   }
   else{
+   /* unsecure flow of variables.... hackers may attack by xss scripting
+   pool.query("SELECT * FROM article WHERE title = '"+articleNameRetrieved+"'",function(err, result){
+   */
+   pool.query("SELECT * FROM article WHERE title = $1",[articleNameRetrieved],function(err, result){
    
-    res.send(createTemplate(articlesDatabase[articleNameRetrieved]));
+        if(err){
+            //query err
+            res.status(500).send(err.toString());
+        }  else{
+            //record not found
+            if(result.rows===0){
+                res.status(40).send("article not found in the record database");
+        
+            }else{
+            //record fount and fetching
+            // we need only the one record
+            //hence
+            var articleData= result.rows[0];
+                res.send(createTemplate(articleData));    
+            }
+            
+        }
+    });
+    
+   // res.send(createTemplate(articlesDatabase[articleNameRetrieved]));
   }
 });
 
