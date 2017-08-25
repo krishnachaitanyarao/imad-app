@@ -4,7 +4,7 @@ var path = require('path');
 
 //database connectivity to the app uysing npm postgress package named as pg package
 
-var Pool = require('pg-pool');
+var Pool = require('pg');
 const config = {
   user: 'jkishorbd',
   host: 'db.imad.hasura-app.io',
@@ -13,6 +13,18 @@ const config = {
   port: 5432,
 };
 var pool= new Pool(config);
+
+app.get('/testDatabase',function(req,res){
+  pool.query("select * from testDatabase",function(err,result){
+    if(err){
+      res.status(500).send(err.toString);
+    }
+    else{
+      res.send(JSON.stringify(result));
+    }
+  });
+});
+
 //name array
 var names=[];
 var app = express();
@@ -87,18 +99,7 @@ var createTemplate = function(data){
     </body>
 </html>`;
   return htmlBody;
-}
-
-app.get('/testDatabase',function(req,res){
-  pool.query("select * from testDatabase",function(err,result){
-    if(err){
-      res.status(500).send(err.toString);
-    }
-    else{
-      res.send(JSON.stringify(result));
-    }
-  });
-});
+};
 
 
 app.get('/', function (req, res) {
