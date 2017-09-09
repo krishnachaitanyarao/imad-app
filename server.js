@@ -54,20 +54,19 @@ var articlesDatabase={
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
-});
-function hash(input,salt){
+});function hash(input,salt){
     //input to be hashed
     //salt - added string extra
     //10000 function iterations
     //512 keylenght
     //sha512 alg
     var key = crypto.pbkdf2Sync(input, salt, 100000, 512, 'sha512');
-    res.send(key.toString('hex'));  // '3745e48...aa39b34'
-    
-};
+    //console.log(key.toString('hex'));  // '3745e48...aa39b34'
+    return [input,salt,"sha152","512length",key].join("$");
+}
 app.get('/hash/:input', function(req,res){
     var hashString= hash(req.params.input,'specify-the-salt-here');
-    
+    res.send(hashString);
 });
 app.get('/testDatabase',function(req,res){
   pool.query(`
