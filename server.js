@@ -51,7 +51,6 @@ var articlesDatabase={
 */
 //duynamic page creator
 var createTemplate = function(data){
-  var heading=data.heading;
   var title= data.title;
   var date= data.date;
   var content= data.content;
@@ -67,7 +66,7 @@ var createTemplate = function(data){
     <body class="container">
       <center>
         <h2>
-            THIS IS FROM THE ${heading} STUPID
+            THIS IS FROM THE DATABASE STUPID
         </h2>
         <h5>${date.toDateString()}</h5>
         <p>${content}</p>
