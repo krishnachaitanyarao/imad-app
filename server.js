@@ -65,22 +65,24 @@ app.get('/', function (req, res) {
     //sha512 alg
     var key = crypto.pbkdf2Sync(input, salt, 100000, 512, 'sha512');
     console.log(key.toString('hex'));  // '3745e48...aa39b34'
-    return [input,salt,"sha152","512length",key].join("$");
-
+    //return [input,salt,"sha152","512length",key].join("$");
+    return key;
 }
 app.get('/hash/:input', function(req,res){
     var hashString= hash(req.params.input,'specify-the-salt-here');
     res.send(hashString);
 });
 app.post('/create-user',function(req,res){
+    //curl for pushing a new user is
+    //curl -v  -XPOST -H 'Content-Type: application/json' --data '{"username": "bhargavi" , "password" : " imad.hasura-app.io/create-user
     //security doesnt allow reading from url in post...so
     //using curl and json data we are creating user..
     //by using bod parser
     var username= req.body.username;
     var password= req.body.password;
     const salt = crypto.randomBytes(128).toString('hex');
-    hash(password,salt);
-    pool.query('INSERT INTO "user" ("username", "password") VALUES ($1,$2);',[username,password],function(err, result){
+    hashResult= hash(password,salt);
+    pool.query('INSERT INTO "user" ("username", "password") VALUES ($1,$2);',[username,hashResult],function(err, result){
    
         if(err){
             //query err
