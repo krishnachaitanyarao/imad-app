@@ -63,6 +63,7 @@ app.get('/', function (req, res) {
     var key = crypto.pbkdf2Sync(input, salt, 100000, 512, 'sha512');
     //console.log(key.toString('hex'));  // '3745e48...aa39b34'
     return [input,salt,"sha152","512length",key].join("$");
+    console.log(key);
 }
 app.get('/hash/:input', function(req,res){
     var hashString= hash(req.params.input,'specify-the-salt-here');
