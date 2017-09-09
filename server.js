@@ -3,6 +3,7 @@ var morgan = require('morgan');
 var path = require('path');
 var Pool = require('pg').Pool;
 var articleData;
+var crypto = require('crypto');
 //database connectivity to the app uysing npm postgress package named as pg package
 
 const config = {
@@ -54,7 +55,20 @@ var articlesDatabase={
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
-
+function hash(input,salt){
+    //input to be hashed
+    //salt - added string extra
+    //10000 function iterations
+    //512 keylenght
+    //sha512 alg
+    var key = crypto.pbkdf2Sync(input, salt, 100000, 512, 'sha512');
+    console.log(key.toString('hex'));  // '3745e48...aa39b34'
+    
+};
+app.get('/hash/:input', function(req,res){
+    var hashString= hash(req.params.input,'specify-the-salt-here');
+    
+});
 app.get('/testDatabase',function(req,res){
   pool.query(`
   SELECT *
