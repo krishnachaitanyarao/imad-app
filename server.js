@@ -103,20 +103,6 @@ var createTemplate = function(data){
   return htmlBody;
 };
 
-<<<<<<< HEAD
-
-=======
-app.get('/testDatabase',function(req,res){
-  pool.query('SELECT * FROM "testDatabase" LIMIT 50',function(err,result){
-    if(err){
-      res.status(500).send(err.toString);
-    }
-    else{
-      res.send(JSON.stringify(result.row));
-    }
-  });
-});
->>>>>>> 212b564c5fcb9bbcc231263d332cd4d78faa4e72
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
