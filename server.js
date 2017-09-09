@@ -1,7 +1,7 @@
 var express = require('express');
 var morgan = require('morgan');
 var path = require('path');
-
+var Pool = require('pg').pool;
 //database connectivity to the app uysing npm postgress package named as pg package
 
 const config = {
