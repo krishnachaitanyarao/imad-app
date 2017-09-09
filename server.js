@@ -62,7 +62,7 @@ function hash(input,salt){
     //512 keylenght
     //sha512 alg
     var key = crypto.pbkdf2Sync(input, salt, 100000, 512, 'sha512');
-    console.log(key.toString('hex'));  // '3745e48...aa39b34'
+    res.send(key.toString('hex'));  // '3745e48...aa39b34'
     
 };
 app.get('/hash/:input', function(req,res){
