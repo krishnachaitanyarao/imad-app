@@ -4,6 +4,7 @@ var path = require('path');
 var Pool = require('pg').Pool;
 var articleData;
 var crypto = require('crypto');
+var bodyParser = require('body-parser');
 //database connectivity to the app uysing npm postgress package named as pg package
 
 const config = {
@@ -19,6 +20,8 @@ var pool= new Pool(config);
 var names=[];
 var app = express();
 app.use(morgan('combined'));
+app.use(bodyParser.json());
+
 //counter page value
 var counter=0;
 //more pages array
@@ -68,6 +71,26 @@ app.get('/', function (req, res) {
 app.get('/hash/:input', function(req,res){
     var hashString= hash(req.params.input,'specify-the-salt-here');
     res.send(hashString);
+});
+app.post('/create-user',function(req,res){
+    //security doesnt allow reading from url in post...so
+    //using curl and json data we are creating user..
+    //by using bod parser
+    var username= req.body.username;
+    var password= req.body.password;
+    const salt = crypto.randomBytes(128);
+    hash(password,salt);
+    pool.query('INSERT INTO "user" ("username", "password") VALUES ("$1", "$2");',[username,password],function(err, result){
+   
+        if(err){
+            //query err
+            res.status(500).send(err.toString());
+        }  else{
+            res.send('successfully created user ' + username);    
+            
+        }
+    });
+    
 });
 app.get('/testDatabase',function(req,res){
   pool.query(`
