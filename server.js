@@ -13,17 +13,6 @@ const config = {
 };
 var pool= new Pool(config);
 
-app.get('/testDatabase',function(req,res){
-  pool.query("select * from testDatabase",function(err,result){
-    if(err){
-      res.status(500).send(err.toString);
-    }
-    else{
-      res.send(JSON.stringify(result));
-    }
-  });
-});
-
 //name array
 var names=[];
 var app = express();
@@ -106,6 +95,18 @@ var createTemplate = function(data){
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
+
+app.get('/testDatabase',function(req,res){
+  pool.query("select * from testDatabase",function(err,result){
+    if(err){
+      res.status(500).send(err.toString);
+    }
+    else{
+      res.send(JSON.stringify(result));
+    }
+  });
+});
+
 /**
  * var articelone= {
     title :'Article-One | Nandu',
