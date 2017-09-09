@@ -2,13 +2,14 @@ var express = require('express');
 var morgan = require('morgan');
 var path = require('path');
 var Pool = require('pg').Pool;
+var articleData;
 //database connectivity to the app uysing npm postgress package named as pg package
 
 const config = {
   user: 'jkishorbd',
   host: 'db.imad.hasura-app.io',
   database: 'jkishorbd',
-  password: process.env.DB_PASSWORD,
+  password: 'db-jkishorbd-77150',
   port: 5432,
 };
 var pool= new Pool(config);
@@ -49,47 +50,6 @@ var articlesDatabase={
   }
 };
 */
-//duynamic page creator
-var createTemplate = function(data){
-  var title= data.title;
-  var date= data.date;
-  var content= data.content;
-  var num=data.num;
-  var htmlBody= `
-  <html>              
-    <head>
-        <title>${title} </title>
-        <link rel="stylesheet" href="/ui/style.css">
-        <script src="/ui/main.js"></script>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body class="container">
-      <center>
-        <h2>
-            THIS IS FROM THE DATABASE STUPID
-        </h2>
-        <h5>${date.toDateString()}</h5>
-        <p>${content}</p>
-        <h1>${num}</h1>
-        <span>
-          <button><a href="/">Home</a></button>
-          <button><a href="/article-one">1</a></button>
-          <button><a href="/article-two">2</a></button>
-          <button><a href="/article-three">3</a></button>
-          
-        </span>
-        <div>
-          <input type="text" placeholder="Name" id="commentorName">
-          <input type="text" placeholder="Name" id="commentorText">
-          <input type="submit" value="Send" id="submit-cmn">
-          <ul id="cmnList">
-            </div>
-    
-      </center>
-    </body>
-</html>`;
-  return htmlBody;
-};
 
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
@@ -169,8 +129,8 @@ app.get('/:articleNameFromUrl',function(req,res){
             //record fount and fetching
             // we need only the one record
             //hence
-            var articleData= result.rows[0];
-                res.send(createTemplate(articleData));    
+            articleData= result.rows[0];
+            res.send(createTemplate(articleData));    
             }
             
         }
@@ -180,6 +140,48 @@ app.get('/:articleNameFromUrl',function(req,res){
   }
 });
 
+
+//duynamic page creator
+var createTemplate = function(articleData){
+  var title= articleData.title;
+  var date= articleData.date;
+  var content= articleData.content;
+  var num=articleData.num;
+  var htmlBody= `
+  <html>              
+    <head>
+        <title>${title} </title>
+        <link rel="stylesheet" href="/ui/style.css">
+        <script src="/ui/main.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body class="container">
+      <center>
+        <h2>
+            THIS IS FROM THE DATABASE STUPID
+        </h2>
+        <h5>${date.toDateString()}</h5>
+        <p>${content}</p>
+        <h1>${num}</h1>
+        <span>
+          <button><a href="/">Home</a></button>
+          <button><a href="/article-one">1</a></button>
+          <button><a href="/article-two">2</a></button>
+          <button><a href="/article-three">3</a></button>
+          
+        </span>
+        <div>
+          <input type="text" placeholder="Name" id="commentorName">
+          <input type="text" placeholder="Name" id="commentorText">
+          <input type="submit" value="Send" id="submit-cmn">
+          <ul id="cmnList">
+            </div>
+    
+      </center>
+    </body>
+</html>`;
+  return htmlBody;
+};
 app.get('/ui/style.css', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'style.css'));
 });
